@@ -2,14 +2,18 @@
   "name": "pre-onboarding",
   "version": "0.0.1",
   "private": true,
+  "repository": "https://github.com/chmini/pre-onboarding.git",
+  "license": "MIT",
+  "author": "chmini <papa00103@naver.com>",
   "workspaces": [
     "apps/*"
   ],
-  "repository": "https://github.com/chmini/pre-onboarding.git",
-  "author": "chmini <papa00103@naver.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "prettier": "^2.8.2"
+  "scripts": {
+    "prepare": "husky install"
   },
-  "main": "index.js"
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "prettier": "^2.8.2"
+  }
 }
