@@ -46,6 +46,8 @@ module.exports = {
       },
     ],
     "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react/button-has-type": "off",
     // "react/function-component-definition": [2, { namedComponents: "arrow-function" }],
     "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
     "react/jsx-sort-props": [
@@ -59,6 +61,7 @@ module.exports = {
     ],
     "@typescript-eslint/consistent-type-exports": ["error", { fixMixedExportsWithInlineTypeSpecifier: false }],
     "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
+    "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
     "@typescript-eslint/no-use-before-define": "off",
     "no-use-before-define": "off",
   },
