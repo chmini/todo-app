@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import type { AxiosError } from "axios";
+
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_ENDPOINT,
   headers: {
@@ -9,7 +11,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => Promise.resolve(response),
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error.response?.data)
 );
 
 export default axiosInstance;

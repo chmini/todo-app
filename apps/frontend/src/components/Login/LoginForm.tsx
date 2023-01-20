@@ -5,6 +5,7 @@ import { useSetRecoilState } from "recoil";
 import * as yup from "yup";
 
 import api from "@/api";
+import { isLoginError } from "@/api/auth";
 import { Button } from "@/components/shared";
 import { accessTokenState } from "@/recoil/auth";
 import { sleep } from "@/utils/sleep";
@@ -12,6 +13,11 @@ import { sleep } from "@/utils/sleep";
 import type { LoginFormData } from "@/api/auth";
 import type { SubmitHandler } from "react-hook-form";
 
+interface LoginFormValues extends LoginFormData {
+  loginError: string;
+}
+
+// TODO Add validation error message
 const schema = yup.object({
   email: yup.string().required().email(),
   password: yup.string().required().min(8),
@@ -22,9 +28,10 @@ export default function LoginForm() {
 
   const {
     register,
+    setError,
     handleSubmit,
     formState: { isSubmitting, errors },
-  } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
+  } = useForm<LoginFormValues>({ resolver: yupResolver(schema) });
 
   const onSubmit: SubmitHandler<LoginFormData> = async (formData) => {
     try {
@@ -35,11 +42,11 @@ export default function LoginForm() {
       setAccessToken(token);
       toast.success(message);
     } catch (error) {
-      /**
-       * 로그인 실패처리
-       * 1. 토스트
-       * 2. 에러 메시지 렌더링
-       */
+      if (isLoginError(error)) {
+        setError("loginError", {
+          message: "아이디 또는 비밀번호를 잘못 입력했습니다.\n 입력하신 내용을 다시 확인해주세요.",
+        });
+      }
     }
   };
 
@@ -47,7 +54,7 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="email">
         이메일
-        <input id="email" placeholder="wanted@email.com" type="email" {...register("email")} />
+        <input id="email" placeholder="wanted@email.com" type="text" {...register("email")} />
       </label>
       {errors.email?.message}
       <label htmlFor="password">
@@ -58,6 +65,7 @@ export default function LoginForm() {
       <Button isLoading={isSubmitting} type="submit">
         로그인
       </Button>
+      {errors.loginError?.message}
     </form>
   );
 }
