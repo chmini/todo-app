@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
@@ -33,21 +34,24 @@ export default function LoginForm() {
     formState: { isSubmitting, errors },
   } = useForm<LoginFormValues>({ resolver: yupResolver(schema) });
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (formData) => {
-    try {
-      // 로딩 처리를 위한 임시 장치
-      await sleep(1000);
-
-      const { message, token } = await api.login(formData);
+  const loginMutation = useMutation((formData: LoginFormData) => api.login(formData), {
+    onSuccess: ({ message, token }) => {
       setAccessToken(token);
       toast.success(message);
-    } catch (error) {
+    },
+    onError: (error) => {
       if (isLoginError(error)) {
         setError("loginError", {
           message: "아이디 또는 비밀번호를 잘못 입력했습니다.\n 입력하신 내용을 다시 확인해주세요.",
         });
       }
-    }
+    },
+  });
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (formData) => {
+    // 로딩 처리를 위한 임시 장치
+    await sleep(1000);
+    loginMutation.mutate(formData);
   };
 
   return (

@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -39,21 +40,23 @@ export default function SignupForm() {
     formState: { errors },
   } = useForm<SignupFormValues>({ resolver: yupResolver(schema) });
 
-  const onSubmit: SubmitHandler<SignupFormValues> = async (formValues) => {
-    const { email, password } = formValues;
-
-    try {
-      // 로딩 처리를 위한 임시 장치
-      await sleep(1000);
-
-      const { message, token } = await api.signup({ email, password });
+  const signupMutation = useMutation((formData: SignupFormData) => api.signup(formData), {
+    onSuccess: ({ message, token }) => {
       setAccessToken(token);
       navigate("/", { replace: true });
       toast.success(message);
-    } catch (error) {
+    },
+    onError: (error) => {
       // TODO 에러 처리
       console.log(error);
-    }
+    },
+  });
+
+  const onSubmit: SubmitHandler<SignupFormValues> = async (formValues) => {
+    const { email, password } = formValues;
+    // 로딩 처리를 위한 임시 장치
+    await sleep(1000);
+    signupMutation.mutate({ email, password });
   };
 
   return (
