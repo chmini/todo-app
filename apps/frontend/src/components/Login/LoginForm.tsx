@@ -2,13 +2,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useSetRecoilState } from "recoil";
 import * as yup from "yup";
 
 import api from "@/api";
 import { isErrorWithMessage } from "@/api/utils";
 import { Button } from "@/components/shared";
-import { accessTokenState } from "@/recoil/auth";
+import { useTokenActions } from "@/store/auth";
 import { sleep } from "@/utils/sleep";
 
 import type { LoginFormData } from "@/api/auth";
@@ -25,7 +24,7 @@ const schema = yup.object({
 });
 
 export default function LoginForm() {
-  const setAccessToken = useSetRecoilState(accessTokenState);
+  const { setToken } = useTokenActions();
 
   const {
     register,
@@ -36,7 +35,7 @@ export default function LoginForm() {
 
   const loginMutation = useMutation((formData: LoginFormData) => api.login(formData), {
     onSuccess: ({ message, token }) => {
-      setAccessToken(token);
+      setToken(token);
       toast.success(message);
     },
     onError: (error) => {

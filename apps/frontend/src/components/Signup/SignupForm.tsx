@@ -3,12 +3,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useSetRecoilState } from "recoil";
 import * as yup from "yup";
 
 import api from "@/api";
 import { Button } from "@/components/shared";
-import { accessTokenState } from "@/recoil/auth";
+import { useTokenActions } from "@/store/auth";
 import { sleep } from "@/utils/sleep";
 
 import type { SignupFormData } from "@/api/auth";
@@ -30,7 +29,7 @@ const schema = yup.object({
 });
 
 export default function SignupForm() {
-  const setAccessToken = useSetRecoilState(accessTokenState);
+  const { setToken } = useTokenActions();
 
   const navigate = useNavigate();
 
@@ -42,7 +41,7 @@ export default function SignupForm() {
 
   const signupMutation = useMutation((formData: SignupFormData) => api.signup(formData), {
     onSuccess: ({ message, token }) => {
-      setAccessToken(token);
+      setToken(token);
       navigate("/", { replace: true });
       toast.success(message);
     },

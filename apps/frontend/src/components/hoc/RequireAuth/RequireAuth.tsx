@@ -1,14 +1,13 @@
 import { useLocation, Navigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 
-import { isAuthenticatedState } from "@/recoil/auth";
+import { useIsAuthenticated } from "@/store/auth";
 
 interface Props {
   children: JSX.Element;
 }
 
 export default function RequireAuth({ children }: Props) {
-  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const isAuthenticated = useIsAuthenticated();
 
   const location = useLocation();
 

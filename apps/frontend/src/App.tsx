@@ -1,16 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRecoilValue } from "recoil";
 
 import { RequireAuth, RequireNonAuth } from "@/components/hoc";
 import LoginPage from "@/pages/Login";
 import SignupPage from "@/pages/Signup";
 import TodoPage from "@/pages/Todo";
-import { isAuthenticatedState } from "@/recoil/auth";
+import { useIsAuthenticated } from "@/store/auth";
 
 export default function App() {
-  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const isAuthenticated = useIsAuthenticated();
 
   return (
     <>
