@@ -10,15 +10,8 @@ interface LoginResponse {
   token: string;
 }
 
-export interface LoginError {
-  details: string;
-}
-
 const login = (formData: LoginFormData) =>
   axiosInstance.post<LoginResponse>("/users/login", formData).then(({ data }) => data);
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-export const isLoginError = (error: any): error is LoginError => error.details !== undefined;
 
 export interface SignupFormData {
   email: string;

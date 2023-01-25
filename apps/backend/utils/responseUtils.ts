@@ -4,8 +4,8 @@ export const createResponse = (data: any) => {
   };
 };
 
-export const createError = (details: any) => {
+export const createError = (message: any) => {
   return {
-    details,
+    message,
   };
 };

@@ -6,7 +6,7 @@ import { useSetRecoilState } from "recoil";
 import * as yup from "yup";
 
 import api from "@/api";
-import { isLoginError } from "@/api/auth";
+import { isErrorWithMessage } from "@/api/utils";
 import { Button } from "@/components/shared";
 import { accessTokenState } from "@/recoil/auth";
 import { sleep } from "@/utils/sleep";
@@ -40,9 +40,9 @@ export default function LoginForm() {
       toast.success(message);
     },
     onError: (error) => {
-      if (isLoginError(error)) {
+      if (isErrorWithMessage(error)) {
         setError("loginError", {
-          message: "아이디 또는 비밀번호를 잘못 입력했습니다.\n 입력하신 내용을 다시 확인해주세요.",
+          message: error.message,
         });
       }
     },
