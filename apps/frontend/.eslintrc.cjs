@@ -64,6 +64,7 @@ module.exports = {
     "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
     "@typescript-eslint/no-use-before-define": "off",
     "no-use-before-define": "off",
+    "no-param-reassign": ["error", { props: false }],
   },
   settings: {
     "import/parsers": {
