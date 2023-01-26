@@ -1,14 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import * as yup from "yup";
 
 import api from "@/api";
 import { isErrorWithMessage } from "@/api/utils";
-import { Button } from "@/components/shared";
 import { useTokenActions } from "@/store/auth";
-import { sleep } from "@/utils/sleep";
 
 import type { LoginFormData } from "@/api/auth";
 import type { SubmitHandler } from "react-hook-form";
@@ -19,24 +18,28 @@ interface LoginFormValues extends LoginFormData {
 
 // TODO Add validation error message
 const schema = yup.object({
-  email: yup.string().required().email(),
-  password: yup.string().required().min(8),
+  email: yup.string().required("이메일을 입력해주세요").email("이메일 형식이 아닙니다"),
+  password: yup.string().required("비밀번호를 입력해주세요").min(8, "비밀번호는 8자리 이상입니다"),
 });
 
 export default function LoginForm() {
   const { setToken } = useTokenActions();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const {
     register,
     setError,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm<LoginFormValues>({ resolver: yupResolver(schema) });
 
   const loginMutation = useMutation((formData: LoginFormData) => api.login(formData), {
     onSuccess: ({ message, token }) => {
       setToken(token);
-      toast.success(message);
+      enqueueSnackbar(message, {
+        variant: "success",
+      });
     },
     onError: (error) => {
       if (isErrorWithMessage(error)) {
@@ -47,28 +50,39 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (formData) => {
-    // 로딩 처리를 위한 임시 장치
-    await sleep(1000);
+  const onSubmit: SubmitHandler<LoginFormData> = (formData) => {
     loginMutation.mutate(formData);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label htmlFor="email">
-        이메일
-        <input id="email" placeholder="wanted@email.com" type="text" {...register("email")} />
-      </label>
-      {errors.email?.message}
-      <label htmlFor="password">
-        패스워드
-        <input id="password" type="password" {...register("password")} />
-      </label>
-      {errors.password?.message}
-      <Button isLoading={isSubmitting} type="submit">
-        로그인
-      </Button>
-      {errors.loginError?.message}
+      <Stack spacing={2}>
+        <TextField
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          id="email"
+          label="이메일"
+          variant="standard"
+          {...register("email")}
+        />
+        <TextField
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          id="password"
+          label="비밀번호"
+          type="password"
+          variant="standard"
+          {...register("password")}
+        />
+        {!!errors.loginError && (
+          <Typography color="error" variant="body2">
+            {errors.loginError.message}
+          </Typography>
+        )}
+        <Button type="submit" variant="contained">
+          로그인
+        </Button>
+      </Stack>
     </form>
   );
 }
