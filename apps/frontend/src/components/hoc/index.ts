@@ -1,2 +1,2 @@
-export * from "./RequireAuth";
-export * from "./RequireNonAuth";
+export { default as RequireAuth } from "./RequireAuth";
+export { default as RequireNonAuth } from "./RequireNonAuth";
