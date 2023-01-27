@@ -10,7 +10,7 @@ interface TokenActions {
   setToken: (token: string) => void;
 }
 
-export const useTokenStore = create<TokenState>()(
+export const useAuthStore = create<TokenState>()(
   persist(
     (set) => ({
       token: "",
@@ -25,8 +25,8 @@ export const useTokenStore = create<TokenState>()(
   )
 );
 
-export const useToken = () => useTokenStore((state) => state.token);
+export const useToken = () => useAuthStore((state) => state.token);
 
-export const useIsAuthenticated = () => useTokenStore((state) => !!state.token);
+export const useIsAuthenticated = () => useAuthStore((state) => !!state.token);
 
-export const useTokenActions = () => useTokenStore((state) => state.actions);
+export const useAuthActions = () => useAuthStore((state) => state.actions);
