@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Stack, TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Stack, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
@@ -7,7 +8,7 @@ import * as yup from "yup";
 
 import api from "@/api";
 import { isErrorWithMessage } from "@/api/utils";
-import { useTokenActions } from "@/store/auth";
+import { useAuthActions } from "@/store/auth";
 
 import type { SignupFormData } from "@/api/auth";
 import type { SubmitHandler } from "react-hook-form";
@@ -26,7 +27,7 @@ const schema = yup.object({
 });
 
 export default function SignupForm() {
-  const { setToken } = useTokenActions();
+  const { setToken } = useAuthActions();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -36,7 +37,7 @@ export default function SignupForm() {
     formState: { errors },
   } = useForm<SignupFormValues>({ resolver: yupResolver(schema) });
 
-  const signupMutation = useMutation((formData: SignupFormData) => api.signup(formData), {
+  const { isLoading, mutate } = useMutation((formData: SignupFormData) => api.signup(formData), {
     onSuccess: ({ message, token }) => {
       setToken(token);
       enqueueSnackbar(message, { variant: "success" });
@@ -50,7 +51,7 @@ export default function SignupForm() {
 
   const onSubmit: SubmitHandler<SignupFormValues> = (formValues) => {
     const { email, password } = formValues;
-    signupMutation.mutate({ email, password });
+    mutate({ email, password });
   };
 
   return (
@@ -85,9 +86,9 @@ export default function SignupForm() {
             {...register("passwordConfirmation")}
           />
         </Stack>
-        <Button size="large" type="submit" variant="contained">
+        <LoadingButton loading={isLoading} size="large" type="submit" variant="contained">
           회원가입
-        </Button>
+        </LoadingButton>
       </Stack>
     </form>
   );

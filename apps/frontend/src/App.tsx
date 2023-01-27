@@ -1,10 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { RequireAuth, RequireNonAuth } from "@/components/hoc";
-import LoginPage from "@/pages/Login";
-import NotFoundPage from "@/pages/NotFoundPage";
-import SignupPage from "@/pages/Signup";
-import TodoPage from "@/pages/Todo";
+import { LoginPage, NotFoundPage, SignupPage, TodoPage } from "@/pages";
 import { useIsAuthenticated } from "@/store/auth";
 
 export default function App() {

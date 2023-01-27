@@ -1,7 +1,7 @@
 import { Box, Container, Link, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
-import { LoginForm } from "@/components/Login";
+import { LoginForm } from "./components";
 
 export default function LoginPage() {
   return (

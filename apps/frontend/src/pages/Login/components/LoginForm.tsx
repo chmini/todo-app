@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Stack, TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Stack, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
@@ -7,7 +8,7 @@ import * as yup from "yup";
 
 import api from "@/api";
 import { isErrorWithMessage } from "@/api/utils";
-import { useTokenActions } from "@/store/auth";
+import { useAuthActions } from "@/store/auth";
 
 import type { LoginFormData } from "@/api/auth";
 import type { SubmitHandler } from "react-hook-form";
@@ -18,7 +19,7 @@ const schema = yup.object({
 });
 
 export default function LoginForm() {
-  const { setToken } = useTokenActions();
+  const { setToken } = useAuthActions();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -28,7 +29,7 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
 
-  const loginMutation = useMutation((formData: LoginFormData) => api.login(formData), {
+  const { isLoading, mutate } = useMutation((formData: LoginFormData) => api.login(formData), {
     onSuccess: ({ message, token }) => {
       setToken(token);
       enqueueSnackbar(message, { variant: "success" });
@@ -41,7 +42,7 @@ export default function LoginForm() {
   });
 
   const onSubmit: SubmitHandler<LoginFormData> = (formData) => {
-    loginMutation.mutate(formData);
+    mutate(formData);
   };
 
   return (
@@ -64,9 +65,9 @@ export default function LoginForm() {
           variant="outlined"
           {...register("password")}
         />
-        <Button size="large" type="submit" variant="contained">
+        <LoadingButton loading={isLoading} size="large" type="submit" variant="contained">
           로그인
-        </Button>
+        </LoadingButton>
       </Stack>
     </form>
   );

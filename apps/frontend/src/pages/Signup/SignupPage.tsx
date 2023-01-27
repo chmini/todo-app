@@ -1,7 +1,7 @@
 import { Box, Container, Link, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
-import SignupForm from "@/components/Signup/SignupForm";
+import { SignupForm } from "./components";
 
 export default function SignupPage() {
   return (
