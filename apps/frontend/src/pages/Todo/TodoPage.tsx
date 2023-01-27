@@ -1,3 +1,11 @@
+import { CurrentTodo, TodoForm, TodoList } from "./components";
+
 export default function TodoPage() {
-  return <div>Todo Page</div>;
+  return (
+    <>
+      <TodoForm />
+      <TodoList />
+      <CurrentTodo />
+    </>
+  );
 }
