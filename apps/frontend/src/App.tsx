@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { Header } from "@/components";
 import { RequireAuth, RequireNonAuth } from "@/components/hoc";
 import { LoginPage, NotFoundPage, SignupPage, TodoPage } from "@/pages";
 import { useIsAuthenticated } from "@/store/auth";
@@ -9,6 +10,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route element={isAuthenticated ? <TodoPage /> : <LoginPage />} path="/" />
         <Route
