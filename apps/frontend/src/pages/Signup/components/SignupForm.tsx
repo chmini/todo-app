@@ -18,12 +18,12 @@ interface SignupFormValues extends SignupFormData {
 }
 
 const schema = yup.object({
-  email: yup.string().required("이메일을 입력해주세요").email("이메일 형식이 아닙니다다"),
-  password: yup.string().required("비밀번호를 입력해주세요").min(8, "비밀번호는 8자리 이상입니다"),
+  email: yup.string().required("Please enter your e-mail").email("This is not an email format"),
+  password: yup.string().required("Please enter your password").min(8, "Your password is at least 8 digits long"),
   passwordConfirmation: yup
     .string()
-    .required("비밀번호를 다시 입력해주세요")
-    .oneOf([yup.ref("password")], "비밀번호가 일치하지 않습니다"),
+    .required("Please reenter your password")
+    .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 
 export default function SignupForm() {
@@ -62,7 +62,7 @@ export default function SignupForm() {
             error={!!errors.email}
             helperText={errors.email?.message}
             id="email"
-            label="이메일"
+            label="Email Address"
             placeholder="papa@email.com"
             variant="outlined"
             {...register("email")}
@@ -71,7 +71,7 @@ export default function SignupForm() {
             error={!!errors.password}
             helperText={errors.password?.message}
             id="password"
-            label="비밀번호"
+            label="Password"
             type="password"
             variant="outlined"
             {...register("password")}
@@ -80,14 +80,14 @@ export default function SignupForm() {
             error={!!errors.passwordConfirmation}
             helperText={errors.passwordConfirmation?.message}
             id="passwordConfirmation"
-            label="비밀번호 확인"
+            label="Password Confirmation"
             type="password"
             variant="outlined"
             {...register("passwordConfirmation")}
           />
         </Stack>
         <LoadingButton loading={isLoading} size="large" type="submit" variant="contained">
-          회원가입
+          sign up
         </LoadingButton>
       </Stack>
     </form>

@@ -14,7 +14,7 @@ export default function SignupPage() {
         <Stack spacing={2}>
           <SignupForm />
           <Link component={RouterLink} textAlign="center" to="/login" variant="body2">
-            로그인 하러가기
+            Already have an account? Log in
           </Link>
         </Stack>
       </Box>

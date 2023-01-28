@@ -14,8 +14,8 @@ import type { LoginFormData } from "@/api/auth";
 import type { SubmitHandler } from "react-hook-form";
 
 const schema = yup.object({
-  email: yup.string().required("이메일을 입력해주세요").email("이메일 형식이 아닙니다"),
-  password: yup.string().required("비밀번호를 입력해주세요").min(8, "비밀번호는 8자리 이상입니다"),
+  email: yup.string().required("Please enter your e-mail").email("This is not an email format"),
+  password: yup.string().required("Please enter your password").min(8, "Your password is at least 8 digits long"),
 });
 
 export default function LoginForm() {
@@ -52,7 +52,8 @@ export default function LoginForm() {
           error={!!errors.email}
           helperText={errors.email?.message}
           id="email"
-          label="이메일"
+          label="Email Address"
+          placeholder="papa@gmail.com"
           variant="outlined"
           {...register("email")}
         />
@@ -60,13 +61,13 @@ export default function LoginForm() {
           error={!!errors.password}
           helperText={errors.password?.message}
           id="password"
-          label="비밀번호"
+          label="Password"
           type="password"
           variant="outlined"
           {...register("password")}
         />
         <LoadingButton loading={isLoading} size="large" type="submit" variant="contained">
-          로그인
+          login
         </LoadingButton>
       </Stack>
     </form>
