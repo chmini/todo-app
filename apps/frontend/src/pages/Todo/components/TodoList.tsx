@@ -1,4 +1,4 @@
-import { List, ListItemButton } from "@mui/material";
+import { List, ListItem, ListItemButton, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import api from "@/api";
@@ -10,24 +10,34 @@ export default function TodoList() {
 
   const { data: todos } = useQuery(["todos"], { queryFn: () => api.getTodos() });
 
-  const handleClick = (event: React.MouseEvent<HTMLUListElement>) => {
-    if (!(event.target instanceof HTMLDivElement)) return;
-
-    const { id } = event.target.dataset;
+  const handleClick = (event: React.MouseEvent<HTMLLIElement>) => {
+    const { id } = event.currentTarget.dataset;
     if (id) updateCurrentTodoId(id);
   };
 
-  const handleContextMenu = (event: React.MouseEvent<HTMLUListElement>) => {
+  const handleContextMenu = (event: React.MouseEvent<HTMLLIElement>) => {
     event.preventDefault();
     console.log("Mouse Right Button");
   };
 
   return (
-    <List onClick={handleClick} onContextMenu={handleContextMenu}>
+    <List>
       {todos?.map((todo) => (
-        <ListItemButton key={todo.id} data-id={todo.id}>
-          {todo.title}
-        </ListItemButton>
+        <ListItem
+          key={todo.id}
+          disablePadding
+          data-id={todo.id}
+          onClick={handleClick}
+          onContextMenu={handleContextMenu}
+        >
+          <ListItemButton>
+            <Stack>
+              <Typography>{todo.title}</Typography>
+              <Typography variant="body2">{new Date(todo.createdAt).toString()}</Typography>
+              <Typography variant="body2">{new Date().toString()}</Typography>
+            </Stack>
+          </ListItemButton>
+        </ListItem>
       ))}
     </List>
   );
