@@ -17,14 +17,14 @@ const schema = yup.object({
 });
 
 export default function TodoForm() {
-  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-
   const { register, handleSubmit } = useForm<TodoFormData>({ resolver: yupResolver(schema) });
 
+  const queryClient = useQueryClient();
   const { mutate } = useMutation((formData: TodoFormData) => api.createTodo(formData), {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["todos"] });
+      // TODO 성공 스낵바(메시지, 투두 여는 버튼) 추가
     },
     onError: (error) => {
       if (isErrorWithMessage(error)) {
@@ -39,10 +39,10 @@ export default function TodoForm() {
 
   return (
     <Stack component="form" spacing={2} onSubmit={handleSubmit(onSubmit)}>
-      <TextField label="할일 추가" variant="filled" {...register("title")} />
-      <TextField multiline label="메모" rows={6} variant="filled" {...register("content")} />
+      <TextField label="To do Name" variant="standard" {...register("title")} />
+      <TextField multiline label="Description" variant="standard" {...register("content")} />
       <Button size="large" type="submit">
-        추가
+        Add To Do
       </Button>
     </Stack>
   );
