@@ -17,19 +17,15 @@ export const login = async (req: Request, res: Response) => {
     return res.status(StatusCodes.BAD_REQUEST).send(createError(message));
   }
 
-  const user = userService.findUser(
-    (user) => user.email === email && user.password === password
-  );
+  const user = userService.findUser((user) => user.email === email && user.password === password);
 
   if (user) {
     return res.status(StatusCodes.OK).send({
-      message: "성공적으로 로그인 했습니다",
+      message: "You logged in successfully",
       token: createToken(email),
     });
   } else {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createError(USER_VALIDATION_ERRORS.USER_NOT_FOUND));
+    return res.status(StatusCodes.BAD_REQUEST).send(createError(USER_VALIDATION_ERRORS.USER_NOT_FOUND));
   }
 };
 
@@ -44,14 +40,12 @@ export const signUp = async (req: Request, res: Response) => {
 
   const existUser = userService.findUser((user) => user.email === email);
   if (existUser) {
-    return res
-      .status(StatusCodes.CONFLICT)
-      .send(createError(USER_VALIDATION_ERRORS.EXIST_USER));
+    return res.status(StatusCodes.CONFLICT).send(createError(USER_VALIDATION_ERRORS.EXIST_USER));
   } else {
     await userService.createUser({ email, password });
 
     return res.status(StatusCodes.OK).send({
-      message: "계정이 성공적으로 생성되었습니다",
+      message: "Account created successfully",
       token: createToken(email),
     });
   }
