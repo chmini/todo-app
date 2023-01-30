@@ -26,8 +26,11 @@ const getTodos = () => axiosInstance.get<TodoResponse<Todo[]>>("/todos").then(({
 const getTodoById = (id: string) =>
   axiosInstance.get<TodoResponse<Todo>>(`/todos/${id}`).then(({ data: { data } }) => data);
 
+const deleteTodo = (id: string) => axiosInstance.delete<TodoResponse<null>>(`/todos/${id}`);
+
 export default {
   createTodo,
   getTodos,
   getTodoById,
+  deleteTodo,
 };
