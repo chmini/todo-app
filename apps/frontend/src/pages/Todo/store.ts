@@ -1,21 +1,21 @@
 import { create } from "zustand";
 
 interface TodoState {
-  currentId: string;
+  current: string;
   actions: TodoActions;
 }
 
 interface TodoActions {
-  updateCurrentTodoId: (newId: string) => void;
+  updateCurrentTodo: (newId: string) => void;
 }
 
 const useTodoStore = create<TodoState>()((set) => ({
-  currentId: "",
+  current: "",
   actions: {
-    updateCurrentTodoId: (newId: string) => set(() => ({ currentId: newId })),
+    updateCurrentTodo: (newTodo: string) => set((state) => ({ current: newTodo })),
   },
 }));
 
-export const useCurrentTodoId = () => useTodoStore((state) => state.currentId);
+export const useCurrentTodo = () => useTodoStore((state) => state.current);
 
 export const useTodoActions = () => useTodoStore((state) => state.actions);

@@ -23,14 +23,18 @@ const createTodo = (formData: TodoFormData) =>
 
 const getTodos = () => axiosInstance.get<TodoResponse<Todo[]>>("/todos").then(({ data: { data } }) => data);
 
-const getTodoById = (id: string) =>
+const getTodo = (id: string) =>
   axiosInstance.get<TodoResponse<Todo>>(`/todos/${id}`).then(({ data: { data } }) => data);
+
+const updateTodo = (id: string, formData: TodoFormData) =>
+  axiosInstance.put<TodoResponse<Todo>>(`/todos/${id}`, formData).then(({ data: { data } }) => data);
 
 const deleteTodo = (id: string) => axiosInstance.delete<TodoResponse<null>>(`/todos/${id}`);
 
 export default {
   createTodo,
   getTodos,
-  getTodoById,
+  getTodo,
+  updateTodo,
   deleteTodo,
 };
