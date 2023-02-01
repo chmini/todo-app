@@ -9,7 +9,13 @@ import theme from "@/styles/theme";
 
 import App from "./App";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
