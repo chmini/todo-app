@@ -1,73 +1,37 @@
-import React from "react";
+import { Button, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 
-import { Delete } from "@mui/icons-material";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { grey } from "@mui/material/colors";
-
-import useModal from "@/hooks/useModal";
+import { useModalActions } from "@/store/modal";
 
 interface Props {
+  title?: string;
   content?: string | JSX.Element;
   confirmMessage: string;
-  position?: "start" | "end";
-  title?: string;
-  tooltip: string;
-  variant: "error" | "warning" | "info" | "success";
+  confirmColor?: "inherit" | "error" | "success" | "warning" | "info" | "primary" | "secondary";
   onConfirm: () => void;
 }
 
-export default function ConfirmDialog({
-  title,
-  content,
-  confirmMessage,
-  position,
-  tooltip,
-  variant,
-  onConfirm,
-}: Props) {
-  const { open, openModal, closeModal } = useModal();
+export default function ConfirmDialog({ title, content, confirmMessage, confirmColor, onConfirm }: Props) {
+  const { closeModal } = useModalActions();
 
   const handleConfirm = () => {
     onConfirm();
     closeModal();
   };
 
-  const handleEnterKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!(event.key === "Enter")) return;
-
-    handleConfirm();
-  };
-
   return (
     <>
-      <Tooltip placement="left" title={tooltip}>
-        <IconButton edge={position} onClick={openModal}>
-          <Delete />
-        </IconButton>
-      </Tooltip>
-      <Dialog open={open} onClose={closeModal} onKeyUp={handleEnterKey}>
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
-          <Typography sx={{ wordBreak: "break-word" }}>{content}</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button sx={{ color: grey[500] }} onClick={closeModal}>
-            Cancel
-          </Button>
-          <Button color={variant} onClick={handleConfirm}>
-            {confirmMessage}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <Typography sx={{ wordBreak: "break-word" }}>{content}</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button sx={{ color: (theme) => theme.palette.grey[500] }} onClick={closeModal}>
+          Cancel
+        </Button>
+        <Button color={confirmColor} onClick={handleConfirm}>
+          {confirmMessage}
+        </Button>
+      </DialogActions>
     </>
   );
 }
