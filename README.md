@@ -31,7 +31,7 @@
 ## :page_facing_up: 개요
 
 제목과 내용으로 구성된 간단한 todo list입니다.<br/>
-가독성이 높은 코드를 짜고 UX 만족도가 높을 수 있는 앱을 만드는 것을 목표로 했습니다.
+가독성이 높은 코드를 짜고 UX 만족도가 높은 앱을 만드는 것을 목표로 했습니다.
 
 [![image](https://user-images.githubusercontent.com/39076382/216623592-4f1b98d6-15e2-470b-b92a-688f3e1f3bbb.png)](https://papa-todo-app.vercel.app)
 
