@@ -2,9 +2,9 @@ import type React from "react";
 
 import { create } from "zustand";
 
-import type { DialogProps } from "@mui/material";
+import type { DialogProps, DrawerProps } from "@mui/material";
 
-type ModalProps = Omit<DialogProps, "open" | "onClose">;
+type ModalProps = Omit<DialogProps, "open" | "onClose"> | Omit<DrawerProps, "open" | "onClose">;
 
 interface ModalSetting {
   id: string;
@@ -19,27 +19,35 @@ interface ModalActions {
 
 interface ModalState {
   modals: ModalSetting[];
+  open: boolean;
   current: ModalSetting | null;
   actions: ModalActions;
 }
 
 const useModalStore = create<ModalState>()((set) => ({
   modals: [],
+  open: false,
   current: null,
   actions: {
-    openModal: (props: Pick<ModalSetting, "children">) =>
+    openModal: (props: Omit<ModalSetting, "id">) =>
       set((state) => {
         const newModal = { id: crypto.randomUUID(), ...props };
-        return { modals: [...state.modals, newModal], current: newModal };
+        return {
+          modals: [...state.modals, newModal],
+          current: newModal,
+          open: true,
+        };
       }),
     closeModal: () =>
       set((state) => ({
         modals: state.modals.filter((modal) => modal.id !== state.current?.id),
-        current: state.modals[state.modals.length - 2] || null,
+        open: false,
       })),
   },
 }));
 
-export const useModal = () => useModalStore((state) => state.current);
+export const useCurrentModal = () => useModalStore((state) => state.current);
+
+export const useModalOpen = () => useModalStore((state) => state.open);
 
 export const useModalActions = () => useModalStore((state) => state.actions);

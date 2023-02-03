@@ -1,14 +1,15 @@
 import { Dialog } from "@mui/material";
 
-import { useModal, useModalActions } from "@/store/modal";
+import { useCurrentModal, useModalActions, useModalOpen } from "@/store/modal";
 
 export default function Modal() {
-  const modal = useModal();
+  const open = useModalOpen();
+  const current = useCurrentModal();
   const { closeModal } = useModalActions();
 
   return (
-    <Dialog open={!!modal} onClose={closeModal} {...modal?.props}>
-      {modal?.children}
+    <Dialog open={open} onClose={closeModal} {...current?.props}>
+      {current?.children}
     </Dialog>
   );
 }
